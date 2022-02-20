@@ -4,6 +4,7 @@ import random
 import time
 import yaml
 import os.path
+import time
 
 def buy_coin(currency, currency_quantity):
     order = client.order_market_buy(
