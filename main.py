@@ -3,6 +3,7 @@ from binance.enums import *
 import random
 import time
 import yaml
+import os.path
 
 def buy_coin(currency, currency_quantity):
     order = client.order_market_buy(
@@ -22,9 +23,11 @@ def load_config(file):
         return yaml.load(file, Loader=yaml.FullLoader)
 
 def create_file():
-    with open('logs.txt', 'a+') as f:
-        f.write('This is a log file for DCA trading bot\n')
-        f.write('\n')
+    if os.path.isfile('logs.txt') == False:
+        with open('logs.txt', 'a+') as f:
+            f.write('This is a log file for DCA trading bot\n')
+            f.write('\n')
+    
 
 def log_order(action):
     with open('logs.txt', 'a+') as f:
