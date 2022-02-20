@@ -32,9 +32,11 @@ def create_file():
 
 def log_order(action):
     now = datetime.datetime.now()
+    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
     with open('logs.txt', 'a+') as f:
-        f.write(now)
+        f.write(date_time + '\n')
         f.write(action + '\n')
+        f.write('\n')
 
 config = load_config('config.yml')
 
