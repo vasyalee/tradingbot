@@ -24,6 +24,7 @@ def load_config(file):
 def create_file():
     with open('logs.txt', 'a+') as f:
         f.write('This is a log file for DCA trading bot\n')
+        f.write('\n')
 
 def log_order(action):
     with open('logs.txt', 'a+') as f:
