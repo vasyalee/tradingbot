@@ -21,6 +21,13 @@ def load_config(file):
     with open(file) as file:
         return yaml.load(file, Loader=yaml.FullLoader)
 
+def create_file():
+    with open('logs.txt', 'a+') as f:
+        f.write('This is a log file for DCA trading bot\n')
+
+def log_order(action):
+    with open('logs.txt', 'a+') as f:
+        f.write(action + '\n')
 config = load_config('config.yml')
 
 API_KEY = config['API_KEY'] # Your public api key goes here
@@ -38,13 +45,16 @@ dca_period = config['DCA_PERIOD']
 
 
 def main():
+    create_file()
     while True:
         try:
             coin = random.choice(coins)
             avg_price = round(float(client.get_avg_price(symbol=coin + 'USDT')['price']))
             quantity = define_quantity(coin, avg_price)
-            print(f'BUYING {quantity} {coin} for {dca_usdt_value} USDT with a price of {avg_price} {coin}/USDT. Next trade in a {dca_period} period')
+            action = f'BUYING {quantity} {coin} for {dca_usdt_value} USDT with a price of {avg_price} {coin}/USDT. Next trade in a {dca_period} period'
+            print(action)
             buy_coin(coin, quantity)
+            log_order(action)
         except Exception as e:
             print(e)
             print('Some error occured.')
