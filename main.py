@@ -4,7 +4,7 @@ import random
 import time
 import yaml
 import os.path
-import time
+import datetime
 
 def buy_coin(currency, currency_quantity):
     order = client.order_market_buy(
@@ -31,7 +31,9 @@ def create_file():
     
 
 def log_order(action):
+    now = datetime.datetime.now()
     with open('logs.txt', 'a+') as f:
+        f.write(now)
         f.write(action + '\n')
 
 config = load_config('config.yml')
