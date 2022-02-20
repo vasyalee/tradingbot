@@ -28,6 +28,7 @@ def create_file():
 def log_order(action):
     with open('logs.txt', 'a+') as f:
         f.write(action + '\n')
+
 config = load_config('config.yml')
 
 API_KEY = config['API_KEY'] # Your public api key goes here
