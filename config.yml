@@ -1,0 +1,11 @@
+# Config file for the dca trading bot
+
+API_KEY: '' # Your api key goes here
+API_SECRET: '' # Your secret key goes here
+
+# Choose the dca period from the following list:
+# 'day', '3 days', 'week', 'month'
+
+
+DCA_PERIOD: 'day'
+DCA_USDT_VALUE: 12 # Here you can set the amount of USDT that is going to be regularly used for trades

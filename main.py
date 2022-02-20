@@ -2,17 +2,39 @@ from binance.client import Client
 from binance.enums import *
 import random
 import time
+import yaml
 
-API_KEY = '' # Your public api key goes here
-API_SECRET = '' # And your secret key goes here (don't show it to anybody!)
+def buy_coin(currency, currency_quantity):
+    order = client.order_market_buy(
+    symbol= currency + 'USDT',
+    quantity=currency_quantity)
+
+def define_quantity(coin, avg_price):
+    if coin == 'BTC':
+        return round(dca_usdt_value / avg_price, 5)
+    elif coin == 'ETH':
+        return round(dca_usdt_value / avg_price, 4)
+    elif coin == 'BNB':
+        return round(dca_usdt_value / avg_price, 3)
+
+def load_config(file):
+    with open(file) as file:
+        return yaml.load(file, Loader=yaml.FullLoader)
+
+config = load_config('config.yml')
+
+API_KEY = config['API_KEY'] # Your public api key goes here
+API_SECRET = config['API_SECRET'] # And your secret key goes here (don't show it to anybody!)
 
 client = Client(API_KEY, API_SECRET)
 
+
+
 #CONFIG:
 coins = ['BTC', 'ETH', 'BNB'] # Coins for the next trade are going to be randomly chosen from this list
-dca_usdt_value = 10000 # Here you can set the amount of USDT that is going to be regularly used for trades
 dca_periods = {'day': 86400, '3 days': 259200, 'week': 604800, 'month': 2_419_200}
-dca_period = 'week' #Choose the DCA period. "Week" by default
+dca_usdt_value = config['DCA_USDT_VALUE']
+dca_period = config['DCA_PERIOD']
 
 
 def main():
@@ -20,18 +42,15 @@ def main():
         try:
             coin = random.choice(coins)
             avg_price = round(float(client.get_avg_price(symbol=coin + 'USDT')['price']))
-            quantity = round(dca_usdt_value / avg_price, 5)
-            print(f'BUYING {quantity} {coin} for {dca_usdt_value} USDT with a price of {avg_price} {coin}/USDT. Next trade in {dca_period}')
+            quantity = define_quantity(coin, avg_price)
+            print(f'BUYING {quantity} {coin} for {dca_usdt_value} USDT with a price of {avg_price} {coin}/USDT. Next trade in a {dca_period} period')
             buy_coin(coin, quantity)
         except Exception as e:
             print(e)
-            print('Some error occured. This is probably because your balance is insufficient.')
+            print('Some error occured.')
         time.sleep(dca_periods[dca_period])
 
-def buy_coin(currency, currency_quantity):
-    order = client.order_market_buy(
-    symbol= currency + 'USDT',
-    quantity=currency_quantity)
+
 
 if __name__ == '__main__':
     main()
